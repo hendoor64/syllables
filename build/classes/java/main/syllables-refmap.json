@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "net/hendoor64/syllables/mixin/SyllablesMixin": {
+      "init()V": "Lnet/minecraft/class_442;method_25426()V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "net/hendoor64/syllables/mixin/SyllablesMixin": {
+        "init()V": "Lnet/minecraft/class_442;method_25426()V"
+      }
+    }
+  }
+}

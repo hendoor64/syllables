@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.hendoor64.syllables.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "SyllablesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

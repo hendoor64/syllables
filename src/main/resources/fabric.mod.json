@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "syllables",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Syllables",
+  "description": "A mod for epic incantations.",
   "authors": [
-    "Me!"
+    "Hendoor64"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/hendoor64/syllables"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/syllables/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.hendoor64.syllables.Syllables"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "syllables.mixins.json"
   ],
 
   "depends": {
