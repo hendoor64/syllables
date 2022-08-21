@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "SyllablesMixin"
+    "SyllablesMixin",
+    "PlayerChatMixin"
   ],
   "injectors": {
     "defaultRequire": 1

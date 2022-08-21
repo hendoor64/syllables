@@ -2,12 +2,18 @@
   "mappings": {
     "net/hendoor64/syllables/mixin/SyllablesMixin": {
       "init()V": "Lnet/minecraft/class_442;method_25426()V"
+    },
+    "net/hendoor64/syllables/mixin/PlayerChatMixin": {
+      "sendChatMessage(Ljava/lang/String;Lnet/minecraft/text/Text;)V": "Lnet/minecraft/class_746;method_44096(Ljava/lang/String;Lnet/minecraft/class_2561;)V"
     }
   },
   "data": {
     "named:intermediary": {
       "net/hendoor64/syllables/mixin/SyllablesMixin": {
         "init()V": "Lnet/minecraft/class_442;method_25426()V"
+      },
+      "net/hendoor64/syllables/mixin/PlayerChatMixin": {
+        "sendChatMessage(Ljava/lang/String;Lnet/minecraft/text/Text;)V": "Lnet/minecraft/class_746;method_44096(Ljava/lang/String;Lnet/minecraft/class_2561;)V"
       }
     }
   }
