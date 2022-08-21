@@ -1,4 +1,4 @@
-package net.hendoor64.syllables.incantation;
+package net.hendoor64.syllables.incantation.util;
 
 import net.minecraft.entity.player.PlayerEntity;
 

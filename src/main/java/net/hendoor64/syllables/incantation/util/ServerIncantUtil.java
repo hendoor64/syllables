@@ -1,4 +1,4 @@
-package net.hendoor64.syllables.incantation;
+package net.hendoor64.syllables.incantation.util;
 
 /**
  * Server side utility methods for incantations.

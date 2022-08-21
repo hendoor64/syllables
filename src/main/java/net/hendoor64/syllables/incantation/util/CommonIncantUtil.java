@@ -1,7 +1,10 @@
-package net.hendoor64.syllables.incantation;
+package net.hendoor64.syllables.incantation.util;
 
+import net.hendoor64.syllables.incantation.Incantation;
 import net.minecraft.entity.player.PlayerEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -10,6 +13,26 @@ import java.util.Optional;
  */
 public class CommonIncantUtil {
     /**
+     * Gets the list of incantations the player has prepared. Incantations in progress are still "prepared", but
+     * spent incantations are not.
+     * @param player
+     * @return a list of the player's prepared incantations.
+     */
+    public static List<Incantation> getPreparedIncantations(PlayerEntity player) {
+        // TODO NYI
+        return new ArrayList<>();
+    }
+
+    /**
+     * Checks whether the player has prepared the given incantation.
+     * @param incantation
+     * @return true if the incantation is prepared.
+     */
+    public static boolean hasPrepared(PlayerEntity player, Incantation incantation) {
+        return getPreparedIncantations(player).contains(incantation);
+    }
+
+    /**
      * Determines whether the passed phrase should trigger the beginning of an incantation for the given player.
      * Typically, this would mean that the phrase is the first one of the incantation.
      * @param player the player to test
@@ -17,7 +40,12 @@ public class CommonIncantUtil {
      * @return either an Optional of the Incantation which should trigger, or Optional.empty()
      */
     private static Optional<Incantation> isIncantTrigger(PlayerEntity player, String phrase) {
-        // TODO not yet implemented
+        List<Incantation> prepared = getPreparedIncantations(player);
+        for (Incantation i : prepared) {
+            if (phrase.equals(i.getPhrases().get(0))) {
+                return Optional.of(i);
+            }
+        }
         return Optional.empty();
     }
 
@@ -35,7 +63,7 @@ public class CommonIncantUtil {
         if (incantation == null) { // Player is not currently incanting
             incantation = isIncantTrigger(player, phrase).orElse(null);
             if (incantation != null) {
-                beginIncantation(player, incantation);
+                incantation.progress(player, phrase);
                 return true;
             }
             return false;
@@ -46,15 +74,6 @@ public class CommonIncantUtil {
             backfire(player);
         }
         return true;
-    }
-
-    /**
-     * Begins the casting of the given incantation for the given player.
-     * @param player
-     * @param incantation
-     */
-    private static void beginIncantation(PlayerEntity player, Incantation incantation) {
-        // TODO NYI
     }
 
     /**

@@ -1,10 +1,8 @@
 package net.hendoor64.syllables.mixin;
 
-import net.hendoor64.syllables.Syllables;
-import net.hendoor64.syllables.incantation.CommonIncantUtil;
+import net.hendoor64.syllables.incantation.util.CommonIncantUtil;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
