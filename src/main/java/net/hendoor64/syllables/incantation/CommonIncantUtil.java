@@ -2,20 +2,23 @@ package net.hendoor64.syllables.incantation;
 
 import net.minecraft.entity.player.PlayerEntity;
 
+import java.util.Optional;
+
 /**
  * Utility methods for incantations to be called from either logical side (client or server).
  * The results of these methods should not depend on side-specific factors.
  */
 public class CommonIncantUtil {
-
     /**
-     * Returns whether the passed player is "incanting": currently partway through casting or targeting an incantation.
-     * @param player the player to check
-     * @return if the player is incanting
+     * Determines whether the passed phrase should trigger the beginning of an incantation for the given player.
+     * Typically, this would mean that the phrase is the first one of the incantation.
+     * @param player the player to test
+     * @param phrase a text message which the player presumably sent
+     * @return either an Optional of the Incantation which should trigger, or Optional.empty()
      */
-    public static boolean isIncanting(PlayerEntity player) {
+    private static Optional<Incantation> isIncantTrigger(PlayerEntity player, String phrase) {
         // TODO not yet implemented
-        return false;
+        return Optional.empty();
     }
 
     /**
@@ -28,20 +31,48 @@ public class CommonIncantUtil {
      * @return whether the phrase was an incantation phrase.
      */
     public static boolean incant(PlayerEntity player, String phrase) {
-        // TODO not yet implemented
-        return false;
+        Incantation incantation = getCurrentIncantation(player).orElse(null);
+        if (incantation == null) { // Player is not currently incanting
+            incantation = isIncantTrigger(player, phrase).orElse(null);
+            if (incantation != null) {
+                beginIncantation(player, incantation);
+                return true;
+            }
+            return false;
+        }
+
+        // Player is incanting; attempt to progress their current incantation
+        if (!incantation.progress(player, phrase)) {
+            backfire(player);
+        }
+        return true;
     }
 
     /**
-     * Determines whether the passed phrase triggers the beginning of an incantation for the given player.
-     * Typically, this would mean the phrase is the first word in an incant that the player has prepared.
-     * @param player the player to test
-     * @param phrase a text message which the player presumably sent
-     * @return a boolean indicating whether the key phrase should trigger the beginning of an incantation
+     * Begins the casting of the given incantation for the given player.
+     * @param player
+     * @param incantation
      */
-    private static boolean isIncantTrigger(PlayerEntity player, String phrase) {
-        // TODO not yet implemented
-        return false;
+    private static void beginIncantation(PlayerEntity player, Incantation incantation) {
+        // TODO NYI
+    }
+
+    /**
+     * Gets the passed player's current active incantation, if any.
+     * @param player
+     * @return Optional.empty() if the player is not incanting, otherwise Optional.of(their incantation)
+     */
+    public static Optional<Incantation> getCurrentIncantation(PlayerEntity player) {
+        // TODO NYI
+        return Optional.empty();
+    }
+
+    /**
+     * Triggers a backfire event on the player. A backfire is the result of a disastrously failed incantation.
+     * @param player
+     */
+    private static void backfire(PlayerEntity player) {
+        // TODO NYI
     }
 
     private CommonIncantUtil() { /* Should not be instantiated */ }
