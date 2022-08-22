@@ -1,6 +1,6 @@
 package net.hendoor64.syllables.mixin;
 
-import net.hendoor64.syllables.incantation.util.CommonIncantUtil;
+import net.hendoor64.syllables.incantation.util.IncantUtil;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +22,7 @@ public class PlayerChatMixin {
     private void onChat(String message, Text preview, CallbackInfo ci) {
         ClientPlayerEntity clientPlayer = (ClientPlayerEntity) (Object) this;
 
-        CommonIncantUtil.incant(clientPlayer, message);
+        IncantUtil.incant(clientPlayer, message);
     }
 
 }

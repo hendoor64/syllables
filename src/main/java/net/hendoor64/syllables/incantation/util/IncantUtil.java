@@ -1,7 +1,14 @@
 package net.hendoor64.syllables.incantation.util;
 
+import net.hendoor64.syllables.Syllables;
 import net.hendoor64.syllables.incantation.Incantation;
+import net.hendoor64.syllables.incantation.status.IncantationStatusEffect;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +18,18 @@ import java.util.Optional;
  * Utility methods for incantations to be called from either logical side (client or server).
  * The results of these methods should not depend on side-specific factors.
  */
-public class CommonIncantUtil {
+public class IncantUtil {
+    /**
+     * Sets the player to have prepared the given incantation.
+     * @param player
+     * @param incantation
+     * @return whether the incantation was successfully prepared.
+     */
+    public static boolean prepareIncantation(PlayerEntity player, Incantation incantation) {
+        // TODO NYI
+        return false;
+    }
+
     /**
      * Gets the list of incantations the player has prepared. Incantations in progress are still "prepared", but
      * spent incantations are not.
@@ -20,7 +38,7 @@ public class CommonIncantUtil {
      */
     public static List<Incantation> getPreparedIncantations(PlayerEntity player) {
         // TODO NYI
-        return new ArrayList<>();
+        return List.of(Incantation.TEST); // TESTING
     }
 
     /**
@@ -82,7 +100,14 @@ public class CommonIncantUtil {
      * @return Optional.empty() if the player is not incanting, otherwise Optional.of(their incantation)
      */
     public static Optional<Incantation> getCurrentIncantation(PlayerEntity player) {
-        // TODO NYI
+        if (player.hasStatusEffect(Syllables.INCANTATION_STATUS_EFFECT)) {
+            IncantationStatusEffect se = (IncantationStatusEffect) player.getStatusEffect(Syllables.INCANTATION_STATUS_EFFECT).getEffectType();
+            for (Incantation i : Incantation.values()) {
+                if (i.equals(se.getIncantation())) {
+                    return Optional.of(i);
+                }
+            }
+        }
         return Optional.empty();
     }
 
@@ -91,8 +116,9 @@ public class CommonIncantUtil {
      * @param player
      */
     private static void backfire(PlayerEntity player) {
+        player.sendMessage(Text.of("Incantation backfired!!!"));
         // TODO NYI
     }
 
-    private CommonIncantUtil() { /* Should not be instantiated */ }
+    private IncantUtil() { /* Should not be instantiated */ }
 }
