@@ -1,26 +1,29 @@
 package net.hendoor64.syllables.incantation;
 
-import net.hendoor64.syllables.incantation.status.IncantationStatusEffect;
+import jdk.jshell.Snippet;
+import net.hendoor64.syllables.Syllables;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
 public enum Incantation {
-    TEST (0, 400, "fus", "ro", "dah");
+    TEST (0,400, Syllables.TEST_INCANTATION_STATUS_EFFECT,"fus", "ro", "dah");
 
     private final List<String> phrases; // The phrases which must be chanted
     private final int id; // Unique identifier
     private final int countdown; // You have this much time to chant the next phrase, in ticks
     private final StatusEffect statusEffect; // Used to track casting in-progress
 
-    Incantation(int id, int countdown, String... phrases) {
+    Incantation(int id, int countdown, StatusEffect statusEffect, String... phrases) {
         this.id = id;
         this.phrases = List.of(phrases);
         this.countdown = countdown;
-        this.statusEffect = new IncantationStatusEffect(this);
+        this.statusEffect = statusEffect;
     }
 
     /**
@@ -32,14 +35,17 @@ public enum Incantation {
      */
     public boolean progress(PlayerEntity player, String phrase) {
         // How far into the incantation is the player?
-        int progress = player.hasStatusEffect(this.statusEffect) ? player.getStatusEffect(this.statusEffect).getAmplifier() : 0;
+        int progress = player.hasStatusEffect(this.statusEffect) ? player.getStatusEffect(this.statusEffect).getAmplifier() + 1 : 0;
 
         if (phrase.equals(phrases.get(progress))) {
             // Phrase matches the next word in the sequence
             // Update player's status effect to show they've progressed one more word
             ++progress;
+
+            player.sendMessage(Text.of("incantation progress: " + progress)); // TESTING
+
             player.removeStatusEffect(this.statusEffect);
-            StatusEffectInstance effectInstance = new StatusEffectInstance(this.statusEffect, countdown, progress,
+            StatusEffectInstance effectInstance = new StatusEffectInstance(this.statusEffect, countdown, progress - 1,
                     false, true, true);
             player.addStatusEffect(effectInstance);
         } else {
@@ -60,6 +66,7 @@ public enum Incantation {
     protected void setTargeting(PlayerEntity player) {
         // TODO NYI
         player.sendMessage(Text.of("Targeting incantation!"));
+        effect(player); // TESTING
     }
 
     /**

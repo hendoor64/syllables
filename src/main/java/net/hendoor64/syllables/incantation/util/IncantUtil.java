@@ -2,7 +2,6 @@ package net.hendoor64.syllables.incantation.util;
 
 import net.hendoor64.syllables.Syllables;
 import net.hendoor64.syllables.incantation.Incantation;
-import net.hendoor64.syllables.incantation.status.IncantationStatusEffect;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -27,7 +26,7 @@ public class IncantUtil {
      */
     public static boolean prepareIncantation(PlayerEntity player, Incantation incantation) {
         // TODO NYI
-        return false;
+        return true; // TESTING
     }
 
     /**
@@ -100,12 +99,9 @@ public class IncantUtil {
      * @return Optional.empty() if the player is not incanting, otherwise Optional.of(their incantation)
      */
     public static Optional<Incantation> getCurrentIncantation(PlayerEntity player) {
-        if (player.hasStatusEffect(Syllables.INCANTATION_STATUS_EFFECT)) {
-            IncantationStatusEffect se = (IncantationStatusEffect) player.getStatusEffect(Syllables.INCANTATION_STATUS_EFFECT).getEffectType();
-            for (Incantation i : Incantation.values()) {
-                if (i.equals(se.getIncantation())) {
-                    return Optional.of(i);
-                }
+        for (Incantation i : Incantation.values()) {
+            if (player.hasStatusEffect(i.getStatusEffect())) {
+                return Optional.of(i);
             }
         }
         return Optional.empty();

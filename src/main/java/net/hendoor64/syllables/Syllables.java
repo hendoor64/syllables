@@ -1,9 +1,9 @@
 package net.hendoor64.syllables;
 
 import net.fabricmc.api.ModInitializer;
-import net.hendoor64.syllables.incantation.status.IncantationStatusEffect;
+import net.hendoor64.syllables.incantation.IncantationStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.util.Identifier;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,9 @@ public class Syllables implements ModInitializer {
 	}
 
 	// Status effects
-	public static final StatusEffect INCANTATION_STATUS_EFFECT = new IncantationStatusEffect(null);
+	public static IncantationStatusEffect TEST_INCANTATION_STATUS_EFFECT;
 
 	private void registerStatusEffects() {
-		Registry.register(Registry.STATUS_EFFECT, new Identifier(MOD_ID, "incantationStatusEffect"), INCANTATION_STATUS_EFFECT);
+		TEST_INCANTATION_STATUS_EFFECT = Registry.register(Registry.STATUS_EFFECT, 0, MOD_ID + ":test_incantation_status_effect", new IncantationStatusEffect(StatusEffectCategory.BENEFICIAL, 0xFFFFFF));
 	}
 }
