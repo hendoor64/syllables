@@ -54,6 +54,7 @@ public enum Incantation {
         }
 
         if (progress >= this.phrases.size()) { // Player has completed speaking the incantation
+            player.removeStatusEffect(this.statusEffect);
             setTargeting(player);
         }
         return true;
@@ -74,6 +75,7 @@ public enum Incantation {
      * @param player the player who cast the incantation.
      */
     protected void effect(PlayerEntity player) {
+        player.removeStatusEffect(this.statusEffect);
         // TODO NYI
         player.sendMessage(Text.of("Effecting incantation!"));
     }

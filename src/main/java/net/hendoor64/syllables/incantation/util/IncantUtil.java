@@ -76,6 +76,10 @@ public class IncantUtil {
      * @return whether the phrase was an incantation phrase.
      */
     public static boolean incant(PlayerEntity player, String phrase) {
+        if (player.world.isClient()) { // This code should only run on the logical server side
+            return false;
+        }
+
         Incantation incantation = getCurrentIncantation(player).orElse(null);
         if (incantation == null) { // Player is not currently incanting
             incantation = isIncantTrigger(player, phrase).orElse(null);
