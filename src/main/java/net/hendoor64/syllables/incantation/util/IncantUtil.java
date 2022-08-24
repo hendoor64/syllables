@@ -16,6 +16,9 @@ import java.util.Optional;
 /**
  * Utility methods for incantations to be called from either logical side (client or server).
  * The results of these methods should not depend on side-specific factors.
+ *
+ * TODO * refactor where these methods live -- could be an injector mixin to PlayerEntity? Some could be moved to
+ * TODO * Incantation itself.
  */
 public class IncantUtil {
     /**
@@ -92,7 +95,7 @@ public class IncantUtil {
 
         // Player is incanting; attempt to progress their current incantation
         if (!incantation.progress(player, phrase)) {
-            backfire(player);
+            backfire(player, incantation);
         }
         return true;
     }
@@ -115,7 +118,8 @@ public class IncantUtil {
      * Triggers a backfire event on the player. A backfire is the result of a disastrously failed incantation.
      * @param player
      */
-    private static void backfire(PlayerEntity player) {
+    private static void backfire(PlayerEntity player, Incantation incantation) {
+        incantation.stopIncanting(player);
         player.sendMessage(Text.of("Incantation backfired!!!"));
         // TODO NYI
     }

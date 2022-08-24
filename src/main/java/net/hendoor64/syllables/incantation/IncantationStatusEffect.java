@@ -8,6 +8,9 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 
 public class IncantationStatusEffect extends StatusEffect {
@@ -18,11 +21,32 @@ public class IncantationStatusEffect extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        doTickEffect(entity);
         int duration = entity.getStatusEffect(this).getDuration();
         if (duration <= 1) {
             entity.removeStatusEffect(this);
             timeoutEffect(entity);
         }
+    }
+
+    /**
+     * Creates the VFX which signal the effect is in action.
+     * A circle of particles around the player.
+     * @param entity
+     */
+    private void doTickEffect(LivingEntity entity) {
+        double h = 2.0D;
+        double theta = entity.age % 360;
+        double x = Math.sin(theta) * h;
+        double z = Math.cos(theta) * h;
+
+        entity.world.addParticle(ParticleTypes.ENCHANT,
+                entity.getEyePos().x + x,
+                entity.getEyeY() - 1.0D,
+                entity.getEyePos().getZ() + z,
+                0.0D,
+                0.0D,
+                0.0D);
     }
 
     @Override
@@ -35,9 +59,12 @@ public class IncantationStatusEffect extends StatusEffect {
      * @param entity
      */
     private void timeoutEffect(LivingEntity entity) {
+        if (entity.world.isClient()) { return; }
+
         // TODO NYI
         if (entity instanceof PlayerEntity) {
             entity.damage(DamageSource.MAGIC, 1);
+            ((PlayerEntity) entity).sendMessage(Text.of("Timeout effect!"));
         }
     }
 }

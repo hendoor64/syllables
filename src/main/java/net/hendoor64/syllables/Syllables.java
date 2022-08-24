@@ -2,6 +2,7 @@ package net.hendoor64.syllables;
 
 import net.fabricmc.api.ModInitializer;
 import net.hendoor64.syllables.incantation.IncantationStatusEffect;
+import net.hendoor64.syllables.networking.SyllablesClientNetworking;
 import net.hendoor64.syllables.networking.SyllablesServerNetworking;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -28,6 +29,8 @@ public class Syllables implements ModInitializer {
 		registerStatusEffects();
 		LOGGER.info("Registering server networking receivers.");
 		SyllablesServerNetworking.registerServerReceivers();
+		LOGGER.info("Registering client networking receivers.");
+		SyllablesClientNetworking.registerClientReceivers();
 	}
 
 	// Status effects

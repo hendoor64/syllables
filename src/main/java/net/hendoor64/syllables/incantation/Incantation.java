@@ -1,13 +1,18 @@
 package net.hendoor64.syllables.incantation;
 
-import jdk.jshell.Snippet;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.hendoor64.syllables.Syllables;
+import net.hendoor64.syllables.networking.SyllablesClientNetworking;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -46,7 +51,7 @@ public enum Incantation {
 
             player.removeStatusEffect(this.statusEffect);
             StatusEffectInstance effectInstance = new StatusEffectInstance(this.statusEffect, countdown, progress - 1,
-                    false, true, true);
+                    false, false, true);
             player.addStatusEffect(effectInstance);
         } else {
             // The player has failed to progress the incantation
@@ -55,16 +60,79 @@ public enum Incantation {
 
         if (progress >= this.phrases.size()) { // Player has completed speaking the incantation
             player.removeStatusEffect(this.statusEffect);
+            doCompletedFX(player, progress);
             setTargeting(player);
+        } else {
+            doProgressFX(player, progress);
         }
         return true;
+    }
+
+    /**
+     * Stops the player's progress in casting this incantation, if they're casting it.
+     * @param player
+     */
+    public void stopIncanting(PlayerEntity player) {
+        player.removeStatusEffect(this.statusEffect);
+    }
+
+    /**
+     * Creates the VFX and audio which signal a successful progression of the incantation.
+     * @param player the player casting the incantation
+     */
+    private void doProgressFX(PlayerEntity player, int progress) {
+        player.sendMessage(Text.of("Progress effect!")); // TESTING
+
+        player.getEntityWorld().playSound(null,
+                player.getBlockPos(),
+                SoundEvents.BLOCK_NOTE_BLOCK_BELL,
+                SoundCategory.PLAYERS,
+                1f, progress * 0.5f);
+
+        player.getEntityWorld().playSound(null,
+                player.getBlockPos(),
+                SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+                SoundCategory.PLAYERS,
+                1f, 1.6f);
+
+        // Send a packet to the client to display particles
+        ServerPlayNetworking.send((ServerPlayerEntity) player,
+                SyllablesClientNetworking.INCANT_PROGRESS_PACKET_ID,
+                PacketByteBufs.empty());
+    }
+
+    /**
+     * Creates the VFX and audio which signal the incantation is complete (i.e., the player has finished
+     * typing all phrases).
+     * @param player
+     */
+    private void doCompletedFX(PlayerEntity player, int progress) {
+        player.getEntityWorld().playSound(null,
+                player.getBlockPos(),
+                SoundEvents.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE,
+                SoundCategory.PLAYERS,
+                0.6f, 1.0f);
+        player.getEntityWorld().playSound(null,
+                player.getBlockPos(),
+                SoundEvents.BLOCK_NOTE_BLOCK_CHIME,
+                SoundCategory.PLAYERS,
+                0.6f, 1.5f);
+        player.getEntityWorld().playSound(null,
+                player.getBlockPos(),
+                SoundEvents.BLOCK_NOTE_BLOCK_BELL,
+                SoundCategory.PLAYERS,
+                1.4f, progress * 0.5f);
+
+        ServerPlayNetworking.send((ServerPlayerEntity) player,
+                SyllablesClientNetworking.INCANT_COMPLETE_PACKET_ID,
+                PacketByteBufs.empty());
     }
 
     /**
      * Set the player in a state of targeting the incantation. Pressing "shift" should trigger the effect.
      * @param player
      */
-    protected void setTargeting(PlayerEntity player) {
+    private void setTargeting(PlayerEntity player) {
         // TODO NYI
         player.sendMessage(Text.of("Targeting incantation!"));
         effect(player); // TESTING
@@ -74,7 +142,7 @@ public enum Incantation {
      * Create/apply the effect of the incantation.
      * @param player the player who cast the incantation.
      */
-    protected void effect(PlayerEntity player) {
+    private void effect(PlayerEntity player) {
         player.removeStatusEffect(this.statusEffect);
         // TODO NYI
         player.sendMessage(Text.of("Effecting incantation!"));
